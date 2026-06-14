@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>가정B 수행평가</title>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Pretendard,Arial,sans-serif;background:#eef2f7;color:#17233c}
+header{background:#0b1f3a;color:white;padding:18px 28px}
+header h1{margin:0;font-size:28px}
+header p{margin:6px 0 0;color:#cbd5e1}
+.container{max-width:1180px;margin:20px auto;padding:0 18px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr)320px;gap:18px}
+.card{background:white;border:1px solid #d7dde8;border-radius:16px;padding:22px;margin-bottom:16px;box-shadow:0 4px 12px rgba(15,23,42,.08)}
+h2{margin:0 0 16px;color:#0b1f3a;border-left:6px solid #1d4ed8;padding-left:10px}
+h3{margin:18px 0 10px;color:#1d4ed8}
+label{display:block;margin-top:12px;font-weight:800}
+input,select,textarea{width:100%;padding:12px;margin-top:6px;border:1px solid #b8c2d1;border-radius:10px;font-size:16px;background:white}
+textarea{min-height:105px;resize:vertical;line-height:1.6}
+button{width:100%;padding:14px;border:0;border-radius:12px;font-size:17px;font-weight:900;cursor:pointer;margin-top:12px}
+button:disabled{opacity:.5;cursor:not-allowed}
+.primary{background:#0b1f3a;color:white}
+.secondary{background:#1d4ed8;color:white}
+.gray{background:#475569;color:white}
+.warning{background:#fff7ed;border:1px solid #fdba74;color:#9a3412;padding:13px;border-radius:12px;font-weight:800;line-height:1.6}
+.info{background:#f8fafc;border:1px solid #d7dde8;padding:13px;border-radius:12px;line-height:1.6}
+.step{display:none}
+.step.active{display:block}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.checkItem,.radioItem{display:flex;gap:8px;align-items:flex-start;background:#f8fafc;border:1px solid #d7dde8;border-radius:10px;padding:10px;margin-top:8px}
+.checkItem input,.radioItem input{width:auto;margin-top:3px}
+.radioGroup{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.colorChips{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px}
+.colorChip input{display:none}
+.colorChip span{display:block;border:2px solid #cbd5e1;border-radius:10px;padding:10px 4px;text-align:center;font-weight:900;background:white}
+.colorChip input:checked+span{border-color:#0b1f3a;background:#dbeafe}
+.sectionTitle{background:#0b1f3a;color:white;padding:13px 16px;border-radius:12px;font-size:20px;font-weight:900;margin:18px 0 14px}
+.sidebar{position:sticky;top:14px;align-self:start}
+.timer{font-size:34px;font-weight:900;text-align:center;color:#0b1f3a}
+.summary{background:#f8fafc;border:1px solid #d7dde8;border-radius:12px;padding:12px;line-height:1.7;font-size:14px;white-space:normal}
+.navBtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:1300px){
+.layout{grid-template-columns:1fr}
+.sidebar{position:sticky;top:0;z-index:10}
+}
+@media(max-width:760px){
+.grid2,.grid3{grid-template-columns:1fr}
+.colorChips{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+
+<body>
+<header>
+<h1>가정B 수행평가</h1>
+<p>TPO에 맞는 셀프 스타일링 기획하기</p>
+</header>
+
+<div class="container layout">
+<main id="captureArea">
+
+<section id="startPage" class="step active">
+<div class="card">
+<h2>평가 정보</h2>
+<div class="grid2">
+<div><b>과목명</b><br>가정B</div>
+<div><b>평가명</b><br>TPO에 맞는 셀프 스타일링 기획하기</div>
+<div><b>평가일</b><br><span id="todayText"></span></div>
+<div><b>시험시간</b><br>40분</div>
+</div>
+<h3>수행과제</h3>
+<ul>
+<li>의복의 의미와 기능을 이해하여 자기 이미지에 맞는 옷차림 디자인하기</li>
+<li>상황을 고려한 옷차림 디자인하기</li>
+<li>의복 디자인 요소를 고려한 옷차림 디자인하기</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>학생 정보</h2>
+<div class="grid3">
+<div><label>반</label><select id="classNum"></select></div>
+<div><label>번호</label><select id="studentNum"></select></div>
+<div><label>이름</label><input id="studentName"></div>
+</div>
+</div>
+
+<div class="card">
+<h2>시험 전 준비사항</h2>
+<label class="checkItem"><input type="checkbox" class="readyCheck"> 책상 위 태블릿 PC를 제외한 필기도구 일체, 담요, 쿠션, 물병을 사물함에 넣었습니다.</label>
+<label class="checkItem"><input type="checkbox" class="readyCheck"> 시험사이트 외 다른 사이트를 모두 닫았습니다.</label>
+<label class="checkItem"><input type="checkbox" class="readyCheck"> 책상 위 낙서를 지웠습니다.</label>
+<label class="checkItem"><input type="checkbox" class="readyCheck"> 부정행위 시 평가에 불이익이 있을 수 있음을 충분히 이해했습니다.</label>
+</div>
+
+<div class="warning">⚠️ 평가 시작 후 새로고침하면 작성 내용이 사라질 수 있습니다. 인터넷 연결 등으로 시험이 중단된 경우 조용히 손을 들어 교사를 부르세요.</div>
+<button class="primary" onclick="startExam()">평가 시작</button>
+</section>
+
+<section id="step1" class="step">
+<div class="card">
+<h2>1. 자신의 특성에 맞는 옷차림 기획하기</h2>
+
+<h3>1-1. 의복으로 표현하고 싶은 나의 신체적 특징을 선택하시오.</h3>
+<div class="grid3">
+<div>
+<label>키</label>
+<div class="radioGroup">
+<label class="radioItem"><input type="radio" name="heightGoal" value="실제보다 커 보이고 싶다">실제보다 커 보이고 싶다</label>
+<label class="radioItem"><input type="radio" name="heightGoal" value="실제보다 작아 보이고 싶다">실제보다 작아 보이고 싶다</label>
+</div>
+</div>
+<div>
+<label>상체</label>
+<div class="radioGroup">
+<label class="radioItem"><input type="radio" name="upperGoal" value="강조하고 싶다">강조하고 싶다</label>
+<label class="radioItem"><input type="radio" name="upperGoal" value="덜 드러나게 하고 싶다">덜 드러나게 하고 싶다</label>
+</div>
+</div>
+<div>
+<label>하체</label>
+<div class="radioGroup">
+<label class="radioItem"><input type="radio" name="lowerGoal" value="강조하고 싶다">강조하고 싶다</label>
+<label class="radioItem"><input type="radio" name="lowerGoal" value="덜 드러나게 하고 싶다">덜 드러나게 하고 싶다</label>
+</div>
+</div>
+</div>
+
+<h3>1-2. 의복을 통해 표현하고 싶은 나의 자기이미지를 선택하시오.</h3>
+<select id="imageStyle">
+<option value="">선택하세요</option>
+<option>단정하고 차분한</option>
+<option>활동적</option>
+<option>화려하고 대담한</option>
+<option>우아한</option>
+<option>귀여운</option>
+<option>친근한</option>
+</select>
+
+<h3>1-3. 나만의 스타일 기획하기</h3>
+<p class="info">자신의 신체적 특성과 개성을 고려하여 나만의 스타일을 기획하시오.</p>
+<label>① 나만의 스타일 이름</label>
+<input id="styleName">
+<label>② 나만의 스타일에 반영된 나의 특성 또는 자기이미지 ①</label>
+<textarea id="styleFeature1" placeholder="구체적으로 서술하시오."></textarea>
+<label>③ 나만의 스타일에 반영된 나의 특성 또는 자기이미지 ②</label>
+<textarea id="styleFeature2" placeholder="구체적으로 서술하시오."></textarea>
+</div>
+<div class="navBtns"><button class="gray" onclick="showStep('startPage')">이전</button><button class="primary" onclick="nextFromStep1()">다음</button></div>
+</section>
+
+<section id="step2" class="step">
+<div class="card">
+<h2>2. 때·장소·상황(TPO)을 고려한 옷차림 설정하기</h2>
+<p class="info">내가 기획할 옷차림이 필요한 시간, 장소, 상황을 각각 작성하시오.</p>
+<div class="grid3">
+<div><label>① T(Time): 언제인가?</label><input id="tpoTime"></div>
+<div><label>② P(Place): 어디인가?</label><input id="tpoPlace"></div>
+<div><label>③ O(Occasion): 어떤 상황인가?</label><input id="tpoOccasion"></div>
+</div>
+</div>
+<div class="navBtns"><button class="gray" onclick="showStep('step1')">이전</button><button class="primary" onclick="nextFromStep2()">다음</button></div>
+</section>
+
+<section id="step3" class="step">
+<div class="card">
+<h2>3. 의복 디자인 요소를 적용하여 옷차림을 디자인하시오.</h2>
+<p class="warning">선, 색, 재질, 무늬 중 3가지 이상을 조화롭게 고려하여 옷차림을 디자인하시오.<br>※ 흰색은 명도 100, 검은색은 명도 0에 해당합니다. 단, 이번 평가에서는 무채색을 선택 색상으로 사용하지 않습니다.</p>
+
+<div class="sectionTitle">상의</div>
+<label>선</label>
+<select id="topLine"><option>없음</option><option>가로선</option><option>세로선</option><option>곡선</option><option>사선</option></select>
+<label>색채</label>
+<div class="colorChips" id="topColorBox"></div>
+<div class="grid2">
+<div><label>명도 <span id="topValueText">50</span></label><input type="range" id="topValue" min="0" max="100" value="50"></div>
+<div><label>채도 <span id="topChromaText">50</span></label><input type="range" id="topChroma" min="0" max="100" value="50"></div>
+</div>
+<label>재질</label>
+<select id="topMaterial"><option>실크</option><option>가죽</option><option>새틴</option><option>면</option><option>데님</option><option>모직</option><option>코듀로이</option><option>니트</option></select>
+<label>무늬</label>
+<div class="grid3">
+<select id="topPattern"><option>없음</option><option>체크</option><option>아가일</option><option>도트</option><option>페이즐리</option></select>
+<select id="topPatternSize"><option>작음</option><option>큼</option></select>
+<div id="topPatternColorBox"></div>
+</div>
+
+<div class="sectionTitle">하의</div>
+<label>선</label>
+<select id="bottomLine"><option>없음</option><option>가로선</option><option>세로선</option><option>곡선</option><option>사선</option></select>
+<label>색채</label>
+<div class="colorChips" id="bottomColorBox"></div>
+<div class="grid2">
+<div><label>명도 <span id="bottomValueText">50</span></label><input type="range" id="bottomValue" min="0" max="100" value="50"></div>
+<div><label>채도 <span id="bottomChromaText">50</span></label><input type="range" id="bottomChroma" min="0" max="100" value="50"></div>
+</div>
+<label>재질</label>
+<select id="bottomMaterial"><option>실크</option><option>가죽</option><option>새틴</option><option>면</option><option>데님</option><option>모직</option><option>코듀로이</option><option>니트</option></select>
+<label>무늬</label>
+<div class="grid3">
+<select id="bottomPattern"><option>없음</option><option>체크</option><option>아가일</option><option>도트</option><option>페이즐리</option></select>
+<select id="bottomPatternSize"><option>작음</option><option>큼</option></select>
+<div id="bottomPatternColorBox"></div>
+</div>
+</div>
+<div class="navBtns"><button class="gray" onclick="showStep('step2')">이전</button><button class="primary" onclick="showStep('step4')">다음</button></div>
+</section>
+
+<section id="step4" class="step">
+<div class="card">
+<h2>4. 옷차림 기획 근거 서술하기</h2>
+
+<h3>4-1. TPO 고려 근거</h3>
+<p class="info">현재 설계한 옷차림이 TPO에 적절한 이유를 구체적으로 서술하시오.</p>
+<label>①</label><textarea id="tpoReason1" placeholder="구체적으로 서술하시오."></textarea>
+<label>②</label><textarea id="tpoReason2" placeholder="구체적으로 서술하시오."></textarea>
+<label>③</label><textarea id="tpoReason3" placeholder="구체적으로 서술하시오."></textarea>
+
+<h3>4-2. 자신의 특성 고려 근거</h3>
+<p class="info">현재 설계한 옷차림이 자신의 신체적 특성과 자기이미지에 적절한 이유를 구체적으로 서술하시오.</p>
+<label>①</label><textarea id="bodyReason1" placeholder="구체적으로 서술하시오."></textarea>
+<label>②</label><textarea id="bodyReason2" placeholder="구체적으로 서술하시오."></textarea>
+<label>③</label><textarea id="bodyReason3" placeholder="구체적으로 서술하시오."></textarea>
+</div>
+<div class="navBtns"><button class="gray" onclick="showStep('step3')">이전</button><button class="primary" onclick="showStep('submitPage')">다음</button></div>
+</section>
+
+<section id="submitPage" class="step">
+<div class="card">
+<h2>최종 제출</h2>
+<div class="warning">
+⚠️ 최종 제출 후에는 수정할 수 없습니다.<br>
+⚠️ 완료한 학생은 태블릿을 덮고 조용히 남은 시간 동안 자습합니다.<br>
+⚠️ 인터넷 연결 등으로 시험이 중단된 경우 조용히 손을 들어 교사를 부르세요.
+</div>
+
+<h3>제출 전 확인</h3>
+<label class="checkItem"><input type="checkbox" class="finalCheck"> 자신의 신체적 특성과 자기이미지를 고려하였다.</label>
+<label class="checkItem"><input type="checkbox" class="finalCheck"> TPO를 고려하였다.</label>
+<label class="checkItem"><input type="checkbox" class="finalCheck"> 선·색·재질·무늬 중 3가지 이상을 활용하였다.</label>
+<label class="checkItem"><input type="checkbox" class="finalCheck"> 근거를 구체적으로 작성하였다.</label>
+
+<h3>최종 요약</h3>
+<div class="summary" id="finalSummary"></div>
+
+<h3>PNG 백업용 제출 내용</h3>
+<div class="summary" id="backupSummary"></div>
+</div>
+
+<div class="navBtns"><button class="gray" onclick="showStep('step4')">이전</button><button id="finalSubmitBtn" class="primary" onclick="submitFinal()">최종 제출</button></div>
+<button id="finalSaveBtn" class="gray" onclick="saveImage()">이미지 저장하기</button>
+</section>
+
+</main>
+
+<aside class="sidebar">
+<div class="card">
+<h2>남은 시간</h2>
+<div class="timer" id="timer">40:00</div>
+</div>
+
+<div class="card">
+<h2>진행 상황</h2>
+<div class="summary" id="summary"></div>
+</div>
+
+<div class="warning">
+⚠️ 새로고침 금지<br>
+⚠️ 최종 제출 후 수정 불가<br>
+⚠️ 완료 후 태블릿을 덮고 자습<br>
+⚠️ 오류 발생 시 조용히 손 들기
+</div>
+
+<button id="sideSubmitBtn" class="secondary" onclick="submitFinal()">최종 제출</button>
+<button id="sideSaveBtn" class="gray" onclick="saveImage()">이미지 저장하기</button>
+</aside>
+</div>
+
+<script>
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbzP5IaWlqKlkRKu9rmKG15ZErL4G1sqSpif6CXilqTQvUE8ICbJ910Ib1sn06pNakLEDw/exec";
+
+let submitted=false;
+let saved=false;
+let timerStarted=false;
+let timeLeft=40*60;
+
+const colors=["빨강","주황","노랑","청록","파랑","남색"];
+
+for(let i=1;i<=11;i++) document.getElementById("classNum").innerHTML+=`<option>${i}반</option>`;
+for(let i=1;i<=32;i++) document.getElementById("studentNum").innerHTML+=`<option>${i}번</option>`;
+document.getElementById("todayText").textContent=new Date().toLocaleDateString("ko-KR");
+
+function v(id){return document.getElementById(id).value;}
+function checked(name){return document.querySelector(`input[name="${name}"]:checked`)?.value||"";}
+function colorValue(name){return document.querySelector(`input[name="${name}"]:checked`)?.value||"";}
+
+function makeColorChips(boxId,name){
+  const box=document.getElementById(boxId);
+  box.className="colorChips";
+  colors.forEach((c,i)=>{
+    box.innerHTML+=`<label class="colorChip"><input type="radio" name="${name}" value="${c}" ${i===0?"checked":""}><span>${c}</span></label>`;
+  });
+}
+makeColorChips("topColorBox","topColor");
+makeColorChips("bottomColorBox","bottomColor");
+makeColorChips("topPatternColorBox","topPatternColor");
+makeColorChips("bottomPatternColorBox","bottomPatternColor");
+
+function showStep(id){
+  if(submitted)return;
+  document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  updateSummary();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function startExam(){
+  if(!v("studentName").trim()){alert("이름을 입력하세요.");return;}
+  if([...document.querySelectorAll(".readyCheck")].some(c=>!c.checked)){alert("시험 전 준비사항을 모두 확인해야 합니다.");return;}
+  showStep("step1");
+  startTimer();
+}
+
+function nextFromStep1(){
+  if(!checked("heightGoal")||!checked("upperGoal")||!checked("lowerGoal")){alert("키, 상체, 하체 항목을 모두 선택하세요.");return;}
+  if(!v("imageStyle")){alert("자기이미지를 선택하세요.");return;}
+  if(!v("styleName").trim()||!v("styleFeature1").trim()||!v("styleFeature2").trim()){alert("나만의 스타일 이름과 반영된 특성 또는 자기이미지 2가지를 모두 작성하세요.");return;}
+  showStep("step2");
+}
+
+function nextFromStep2(){
+  if(!v("tpoTime").trim()||!v("tpoPlace").trim()||!v("tpoOccasion").trim()){alert("T(Time), P(Place), O(Occasion)를 모두 작성하세요.");return;}
+  showStep("step3");
+}
+
+function startTimer(){
+  if(timerStarted)return;
+  timerStarted=true;
+  setInterval(()=>{
+    if(timeLeft<=0)return;
+    timeLeft--;
+    const m=String(Math.floor(timeLeft/60)).padStart(2,"0");
+    const s=String(timeLeft%60).padStart(2,"0");
+    document.getElementById("timer").textContent=`${m}:${s}`;
+    if(timeLeft===0)alert("시험 시간이 종료되었습니다. 최종 제출을 진행하세요.");
+  },1000);
+}
+
+document.addEventListener("input",updateSummary);
+document.addEventListener("change",updateSummary);
+
+function patternText(part){
+  const pattern=v(part+"Pattern");
+  if(pattern==="없음") return "없음";
+  return `${pattern} / 크기 ${v(part+"PatternSize")} / 색 ${colorValue(part+"PatternColor")}`;
+}
+
+function updateSummary(){
+  ["top","bottom"].forEach(p=>{
+    document.getElementById(`${p}ValueText`).textContent=v(`${p}Value`);
+    document.getElementById(`${p}ChromaText`).textContent=v(`${p}Chroma`);
+  });
+
+  const brief=`
+  <b>학생</b><br>${v("classNum")} ${v("studentNum")} ${v("studentName")}<br><br>
+  <b>신체 목표</b><br>
+  키: ${checked("heightGoal")||"-"}<br>
+  상체: ${checked("upperGoal")||"-"}<br>
+  하체: ${checked("lowerGoal")||"-"}<br><br>
+  <b>자기이미지</b><br>${v("imageStyle")||"-"}<br><br>
+  <b>스타일 이름</b><br>${v("styleName")||"-"}<br><br>
+  <b>TPO</b><br>${v("tpoTime")||"-"} / ${v("tpoPlace")||"-"} / ${v("tpoOccasion")||"-"}
+  `;
+  document.getElementById("summary").innerHTML=brief;
+  document.getElementById("finalSummary").innerHTML=brief;
+
+  document.getElementById("backupSummary").innerHTML=`
+  <b>학생 정보</b><br>${v("classNum")} ${v("studentNum")} ${v("studentName")}<br><br>
+
+  <b>1. 자신의 특성에 맞는 옷차림 기획하기</b><br>
+  키: ${checked("heightGoal")||"-"}<br>
+  상체: ${checked("upperGoal")||"-"}<br>
+  하체: ${checked("lowerGoal")||"-"}<br>
+  자기이미지: ${v("imageStyle")||"-"}<br>
+  나만의 스타일 이름: ${v("styleName")||"-"}<br>
+  특성 또는 자기이미지 ①: ${v("styleFeature1")||"-"}<br>
+  특성 또는 자기이미지 ②: ${v("styleFeature2")||"-"}<br><br>
+
+  <b>2. TPO 설정</b><br>
+  T(Time): ${v("tpoTime")||"-"}<br>
+  P(Place): ${v("tpoPlace")||"-"}<br>
+  O(Occasion): ${v("tpoOccasion")||"-"}<br><br>
+
+  <b>3. 의복 디자인 요소 적용</b><br>
+  <b>상의</b><br>
+  선: ${v("topLine")}<br>
+  색채: ${colorValue("topColor")} / 명도 ${v("topValue")} / 채도 ${v("topChroma")}<br>
+  재질: ${v("topMaterial")}<br>
+  무늬: ${patternText("top")}<br><br>
+
+  <b>하의</b><br>
+  선: ${v("bottomLine")}<br>
+  색채: ${colorValue("bottomColor")} / 명도 ${v("bottomValue")} / 채도 ${v("bottomChroma")}<br>
+  재질: ${v("bottomMaterial")}<br>
+  무늬: ${patternText("bottom")}<br><br>
+
+  <b>4-1. TPO 고려 근거</b><br>
+  ① ${v("tpoReason1")||"-"}<br>
+  ② ${v("tpoReason2")||"-"}<br>
+  ③ ${v("tpoReason3")||"-"}<br><br>
+
+  <b>4-2. 자신의 특성 고려 근거</b><br>
+  ① ${v("bodyReason1")||"-"}<br>
+  ② ${v("bodyReason2")||"-"}<br>
+  ③ ${v("bodyReason3")||"-"}
+  `;
+}
+
+function collectData(){
+  return{
+    date:new Date().toLocaleString("ko-KR"),
+    classNum:v("classNum"),
+    studentNum:v("studentNum"),
+    studentName:v("studentName"),
+    heightGoal:checked("heightGoal"),
+    upperGoal:checked("upperGoal"),
+    lowerGoal:checked("lowerGoal"),
+    imageStyle:v("imageStyle"),
+    styleName:v("styleName"),
+    styleFeature1:v("styleFeature1"),
+    styleFeature2:v("styleFeature2"),
+    tpoTime:v("tpoTime"),
+    tpoPlace:v("tpoPlace"),
+    tpoOccasion:v("tpoOccasion"),
+    topLine:v("topLine"),
+    topColor:colorValue("topColor"),
+    topValue:v("topValue"),
+    topChroma:v("topChroma"),
+    topMaterial:v("topMaterial"),
+    topPattern:v("topPattern"),
+    topPatternSize:v("topPattern")==="없음"?"":v("topPatternSize"),
+    topPatternColor:v("topPattern")==="없음"?"":colorValue("topPatternColor"),
+    bottomLine:v("bottomLine"),
+    bottomColor:colorValue("bottomColor"),
+    bottomValue:v("bottomValue"),
+    bottomChroma:v("bottomChroma"),
+    bottomMaterial:v("bottomMaterial"),
+    bottomPattern:v("bottomPattern"),
+    bottomPatternSize:v("bottomPattern")==="없음"?"":v("bottomPatternSize"),
+    bottomPatternColor:v("bottomPattern")==="없음"?"":colorValue("bottomPatternColor"),
+    tpoReason1:v("tpoReason1"),
+    tpoReason2:v("tpoReason2"),
+    tpoReason3:v("tpoReason3"),
+    bodyReason1:v("bodyReason1"),
+    bodyReason2:v("bodyReason2"),
+    bodyReason3:v("bodyReason3")
+  };
+}
+
+function submitFinal(){
+  if(submitted){alert("최종 제출은 1번만 가능합니다.");return;}
+  if(!v("tpoReason1").trim()||!v("tpoReason2").trim()||!v("tpoReason3").trim()||!v("bodyReason1").trim()||!v("bodyReason2").trim()||!v("bodyReason3").trim()){
+    alert("TPO 고려 근거 3가지와 자신의 특성 고려 근거 3가지를 모두 작성하세요.");
+    return;
+  }
+  if([...document.querySelectorAll(".finalCheck")].some(c=>!c.checked)){alert("제출 전 확인 항목을 모두 체크하세요.");return;}
+  if(!confirm("최종 제출 후에는 수정할 수 없습니다. 제출하시겠습니까?"))return;
+
+  updateSummary();
+
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    mode:"no-cors",
+    body:new URLSearchParams({payload:JSON.stringify(collectData())})
+  });
+
+  submitted=true;
+  document.querySelectorAll("input,select,textarea").forEach(el=>el.disabled=true);
+  document.getElementById("sideSubmitBtn").disabled=true;
+  document.getElementById("sideSubmitBtn").textContent="제출 완료";
+  document.getElementById("finalSubmitBtn").disabled=true;
+  document.getElementById("finalSubmitBtn").textContent="제출 완료";
+  alert("최종 제출되었습니다. 이미지를 저장하세요.");
+}
+
+function saveImage(){
+  if(saved){alert("이미지 저장은 1번만 가능합니다.");return;}
+  updateSummary();
+
+  html2canvas(document.getElementById("captureArea"),{scale:2,backgroundColor:"#ffffff"}).then(canvas=>{
+    const a=document.createElement("a");
+    a.download=`${v("classNum")}_${v("studentNum")}_${v("studentName")}_TPO셀프스타일링.png`;
+    a.href=canvas.toDataURL("image/png");
+    a.click();
+
+    saved=true;
+    document.getElementById("sideSaveBtn").disabled=true;
+    document.getElementById("sideSaveBtn").textContent="이미지 저장 완료";
+    document.getElementById("finalSaveBtn").disabled=true;
+    document.getElementById("finalSaveBtn").textContent="이미지 저장 완료";
+    alert("이미지 저장이 완료되었습니다.");
+  });
+}
+
+window.addEventListener("beforeunload",function(e){
+  if(!submitted){
+    e.preventDefault();
+    e.returnValue="";
+  }
+});
+
+updateSummary();
+</script>
+</body>
+</html>
